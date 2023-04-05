@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React,{useState,useEffect, useCallback} from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
@@ -8,12 +8,14 @@ function App() {
   const [isLoading,setisLoading]=useState(false);
   const [error,seterror]=useState(null);
 
-  async function fetchMovieHandler() {
+  const fetchMovieHandler= useCallback(async () => {
     setisLoading(true);
     try {
-      const response=await fetch("https://swapi.dev/api/films/");
+      const response=await fetch("https://swapi.dev/api/film/");
+      // console.log(response.ok);
      if(!response.ok)
     {
+      
       throw new Error('Something went wrong ....Retrying')
     }
       const data=await response.json();
@@ -33,15 +35,21 @@ function App() {
       seterror(error.message)
     }
      setisLoading(false);    
-  }
+  },[])
+
+useEffect(() => {
+  fetchMovieHandler()
+
+}, [fetchMovieHandler])
 
   let constent=<p>Movies Not Found.</p>
   if(movies.length>0){
     constent=<MoviesList movies={movies}/>
   }
-  if(error){
-    constent=<p>{error}</p>
+  if(error){   
+    constent=<div><p>{error}</p></div>
   }
+
   if(isLoading){
 constent=<p>Loding....</p>
   }
@@ -51,7 +59,7 @@ constent=<p>Loding....</p>
         <button onClick={fetchMovieHandler}>Fetch Movies</button>
       </section>
       <section>
-        {constent}
+        {constent}       
       </section>
     </React.Fragment>
   );
