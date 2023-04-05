@@ -2,6 +2,7 @@ import React,{useState,useEffect, useCallback} from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
+import InputMovieByUser from "./components/InputMovieByUser";
 
 function App() {
   const [movies,setmovies]=useState([]);
@@ -55,6 +56,9 @@ constent=<p>Loding....</p>
   }
   return (
     <React.Fragment>
+      <section>
+        <InputMovieByUser/>
+      </section>
       <section>
         <button onClick={fetchMovieHandler}>Fetch Movies</button>
       </section>
